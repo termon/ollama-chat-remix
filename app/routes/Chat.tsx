@@ -48,12 +48,12 @@ export default function Chat() {
 
             {/* Output a waiting message */}
             {isLoading && messages[messages.length - 1].role !== "assistant" && (
-                <div className="flex flex-row gap-2 px-4 w-full md:w-[500px] md:px-0">
+                <div className="flex flex-row gap-2 px-4 w-full md:w-[500px] md:px-0 mx-auto">
                     <div className="size-[24px] flex flex-col justify-center items-center flex-shrink-0 text-zinc-400">
                         <BotIcon />
                     </div>
                     <div className="flex flex-col gap-1 text-zinc-400">
-                        <div>hmm...</div>
+                        <div>let me think...</div>
                     </div>
                 </div>
             )}
