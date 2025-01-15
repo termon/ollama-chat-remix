@@ -1,5 +1,4 @@
 // app/routes/Chat.tsx
-import { useState } from 'react';
 import { useChat } from 'ai/react';
 import {
     BotIcon,
@@ -9,31 +8,30 @@ import { Markdown } from '~/components/markdown';
 
 export default function Chat() {
     const { messages, input, handleInputChange, handleSubmit, isLoading } = useChat({
-        onError: () =>
-            console.error("You've been rate limited, please try again later!"),
-    });;
+        onError: () => console.error("An error occured!")
+    });
 
     return (
         <div className="flex flex-col justify-between gap-4">
-            {messages.length > 0 ? (
-                <div className="flex flex-col gap-2 h-full w-dvw items-center overflow-y-scroll">
-                    {messages.map((m) => (
-                        <div key={m.id} className="flex flex-row gap-2 px-4 w-full md:w-[500px] md:px-0">
-                            <div className="size-[24px] flex flex-col justify-center items-center flex-shrink-0 text-zinc-400">
-                                {m.role === "assistant" ? <BotIcon /> : <UserIcon />}
-                            </div>
 
-                            <div className="flex flex-col gap-1">
-                                <div className="text-zinc-800 dark:text-zinc-300 flex flex-col gap-4">
-                                    <Markdown>{m.content}</Markdown>
-                                </div>
+            {/* Output the messages */}
+            <div className="flex flex-col gap-2 h-full w-dvw items-center overflow-y-scroll">
+                {messages.map((m) => (
+                    <div key={m.id} className="flex flex-row gap-2 px-4 w-full md:w-[500px] md:px-0">
+                        <div className="size-[24px] flex flex-col justify-center items-center flex-shrink-0 text-zinc-400">
+                            {m.role === "assistant" ? <BotIcon /> : <UserIcon />}
+                        </div>
+
+                        <div className="flex flex-col gap-1">
+                            <div className="text-zinc-800 dark:text-zinc-300 flex flex-col gap-4">
+                                <Markdown>{m.content}</Markdown>
                             </div>
                         </div>
-                    ))}
-                </div>
-            ) : null
-            }
+                    </div>
+                ))}
+            </div>
 
+            {/* Output a waiting message */}
             {isLoading && messages[messages.length - 1].role !== "assistant" && (
                 <div className="flex flex-row gap-2 px-4 w-full md:w-[500px] md:px-0">
                     <div className="size-[24px] flex flex-col justify-center items-center flex-shrink-0 text-zinc-400">
@@ -45,6 +43,7 @@ export default function Chat() {
                 </div>
             )}
 
+            {/* Display the chat message input form */}
             <form onSubmit={handleSubmit} className="flex flex-col gap-2 relative items-center">
                 <input className="w-1/2 border border-gray-100 rounded shadow-md
                      p-3 bg-transparent flex-grow outline-none text-zinc-800 dark:text-zinc-300 placeholder-zinc-400"
