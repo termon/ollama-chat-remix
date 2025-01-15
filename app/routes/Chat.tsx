@@ -5,11 +5,23 @@ import {
     UserIcon,
 } from "../components/icons";
 import { Markdown } from '~/components/markdown';
+import { useEffect, useRef } from 'react';
+import AutoResizeInput from '~/components/AutoResizeInput';
 
 export default function Chat() {
     const { messages, input, handleInputChange, handleSubmit, isLoading } = useChat({
         onError: () => console.error("An error occured!")
     });
+
+    const messagesEndRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        scrollToBottom();
+    }, [messages]);
+
+    const scrollToBottom = () => {
+        messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+      };
 
     return (
         <div className="flex flex-col justify-between gap-4">
@@ -31,6 +43,9 @@ export default function Chat() {
                 ))}
             </div>
 
+            {/* // marker used as a scroll position */}
+            <div ref={messagesEndRef} />
+
             {/* Output a waiting message */}
             {isLoading && messages[messages.length - 1].role !== "assistant" && (
                 <div className="flex flex-row gap-2 px-4 w-full md:w-[500px] md:px-0">
@@ -45,12 +60,11 @@ export default function Chat() {
 
             {/* Display the chat message input form */}
             <form onSubmit={handleSubmit} className="flex flex-col gap-2 relative items-center">
-                <input className="w-1/2 border border-gray-100 rounded shadow-md
-                     p-3 bg-transparent flex-grow outline-none text-zinc-800 dark:text-zinc-300 placeholder-zinc-400"
+                <AutoResizeInput 
                     value={input}
                     placeholder='Ask a question...'
                     onChange={handleInputChange}
-                />
+                    className="min-w-[500px]"/>
             </form>
 
         </div>
